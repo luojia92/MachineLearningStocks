@@ -8,7 +8,7 @@ from tqdm import tqdm
 from utils import data_string_to_float
 
 # The path to your fundamental data
-statspath = "intraQuarter/_KeyStats/"
+statspath = "data/intraQuarter/_KeyStats/"
 
 # These are the features that will be parsed
 features = [  # Valuation measures
@@ -69,7 +69,7 @@ def check_yahoo():
 
     # Retrieve a list of tickers from the fundamental data folder
     ticker_list = os.listdir(statspath)
-
+    
     # Required in macOS to remove the hidden index file.
     if ".DS_Store" in ticker_list:
         ticker_list.remove(".DS_Store")
@@ -77,8 +77,8 @@ def check_yahoo():
     for ticker in tqdm(ticker_list, desc="Download progress:", unit="tickers"):
         try:
             link = f"http://finance.yahoo.com/quote/{ticker.upper()}/key-statistics"
-            resp = requests.get(link)
-
+            resp = requests.get(link, headers={'User-Agent': 'Custom'})
+            
             # Write results to forward/
             save = f"forward/{ticker}.html"
             with open(save, "w") as file:

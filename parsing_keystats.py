@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 
 # The directory where individual html files are stored
-statspath = "intraQuarter/_KeyStats/"
+statspath = "data/intraQuarter/_KeyStats/"
 
 # The list of features to parse from the html files
 features = [  # Valuation measures
@@ -111,7 +111,6 @@ def parse_keystats(sp500_df, stock_df):
     ] + features
 
     df = pd.DataFrame(columns=df_columns)
-
     # tqdm is a simple progress bar
     for stock_directory in tqdm(stock_list, desc="Parsing progress:", unit="tickers"):
         keystats_html_files = os.listdir(stock_directory)
@@ -149,7 +148,7 @@ def parse_keystats(sp500_df, stock_df):
                             r"(</td>|</span>)"
                         )
                         value = re.search(regex, source, flags=re.DOTALL).group(1)
-
+                        
                         # Dealing with number formatting
                         value_list.append(data_string_to_float(value))
 
@@ -181,14 +180,12 @@ def parse_keystats(sp500_df, stock_df):
             one_year_later = datetime.fromtimestamp(unix_time + 31536000).strftime(
                 "%Y-%m-%d"
             )
-
             # SP500 prices now and one year later, and the percentage change
             sp500_price = float(sp500_df.loc[current_date, "Adj Close"])
             sp500_1y_price = float(sp500_df.loc[one_year_later, "Adj Close"])
             sp500_p_change = round(
                 ((sp500_1y_price - sp500_price) / sp500_price * 100), 2
             )
-
             # Stock prices now and one year later. We need a try/except because some data is missing
             stock_price, stock_1y_price = "N/A", "N/A"
             try:

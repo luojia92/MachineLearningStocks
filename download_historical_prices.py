@@ -2,11 +2,11 @@ import os
 from pandas_datareader import data as pdr
 import pandas as pd
 import fix_yahoo_finance as yf
-
+import yfinance as yf
 yf.pdr_override()
 
 START_DATE = "2003-08-01"
-END_DATE = "2015-01-01"
+END_DATE = "2020-12-31"
 
 
 def build_stock_dataset(start=START_DATE, end=END_DATE):
@@ -15,7 +15,7 @@ def build_stock_dataset(start=START_DATE, end=END_DATE):
     :returns: stock_prices.csv
     """
 
-    statspath = "intraQuarter/_KeyStats/"
+    statspath = "data/intraQuarter/_KeyStats/"
     ticker_list = os.listdir(statspath)
 
     # Required on macOS
